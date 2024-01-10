@@ -15,6 +15,7 @@
 #include "std_msgs/msg/int64.hpp"
 #include "std_msgs/msg/float32.hpp"
 #include "std_msgs/msg/float64.hpp"
+#include "std_msgs/msg/float64_multi_array.hpp"
 #include <cstdint>
 
 #include "monitor.h"
@@ -22,12 +23,12 @@
 
 using std::placeholders::_1;
 
-Float64Array wheel_velocity_controller_commands;
+double* wheel_velocity_controller_commands;
 
 class CopilotRV : public rclcpp::Node {
   public:
     CopilotRV() : Node("copilotrv") {
-      wheel_velocity_controller_commands_subscription_ = this->create_subscription<Float64Array>(
+      wheel_velocity_controller_commands_subscription_ = this->create_subscription<std_msgs::msg::Float64MultiArray>(
         "/wheel_velocity_controller/commands", 10,
         std::bind(&CopilotRV::wheel_velocity_controller_commands_callback, this, _1));
 
@@ -49,12 +50,12 @@ class CopilotRV : public rclcpp::Node {
     }
 
   private:
-    void wheel_velocity_controller_commands_callback(const Float64Array::SharedPtr msg) const {
-      wheel_velocity_controller_commands = msg->data;
+    void wheel_velocity_controller_commands_callback(const std_msgs::msg::Float64MultiArray::SharedPtr msg) const {
+      wheel_velocity_controller_commands = &msg->data[0];
       step();
     }
 
-    rclcpp::Subscription<Float64Array>::SharedPtr wheel_velocity_controller_commands_subscription_;
+    rclcpp::Subscription<std_msgs::msg::Float64MultiArray>::SharedPtr wheel_velocity_controller_commands_subscription_;
 
     rclcpp::Publisher<std_msgs::msg::Empty>::SharedPtr propTooFast_publisher_;
 
