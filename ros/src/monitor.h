@@ -1,3 +1,3 @@
-extern double_t wheel_velocity_controller_commands[(6)];
+extern double* wheel_velocity_controller_commands;
 void propTooFast(void);
 void step(void);
