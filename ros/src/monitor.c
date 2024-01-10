@@ -7,14 +7,14 @@
 #include "monitor_types.h"
 #include "monitor.h"
 
-static double_t thing_cpy[(6)];
+static double_t wheel_velocity_controller_commands_cpy[(6)];
 
 static bool propTooFast_guard(void) {
-  return ((thing_cpy)[(uint32_t)(0)]) > ((double_t)(3.0));
+  return ((wheel_velocity_controller_commands_cpy)[(uint32_t)(0)]) > ((double_t)(3.0));
 }
 
 void step(void) {
-  (memcpy)((thing_cpy), (thing), ((6) * (sizeof(double_t))));
+  (memcpy)((wheel_velocity_controller_commands_cpy), (wheel_velocity_controller_commands), ((6) * (sizeof(double_t))));
   if ((propTooFast_guard)()) {
     {(propTooFast)();}
   };
